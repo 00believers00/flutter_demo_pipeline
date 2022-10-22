@@ -15,7 +15,7 @@ jobs:
     steps:
       - task: FlutterInstall@0
     displayName: "Install Flutter"
-    inputs:
+    input:
       mode: "auto"
       channel: "stable"
       version: "custom"
@@ -23,14 +23,14 @@ jobs:
 
   - task: FlutterBuild@0
     displayName: "Build unsigned APK"
-    inputs:
+    input:
       target: apk
       projectDirectory: "."
       buildNumber: ""
 
   - task: AndroidSigning@3
     displayName: "Signing and aligning APK file(s) **/*.apk"
-    inputs:
+    input:
       apkFiles: "**/*.apk"
       apksign: true
       apksignerKeystoreFile: "$(androidKeystoreFile)"
@@ -40,18 +40,18 @@ jobs:
 
   - task: CopyFiles@2
     displayName: "Copy apk to artifact directory"
-    inputs:
+    input:
       contents: "**/*.apk"
       targetFolder: "$(build.artifactStagingDirectory)"
 
   - task: PublishBuildArtifacts@1
     displayName: "Publish signed apk as artifact"
-    inputs:
+    input:
       artifactName: "drop"
 
   - task: Bash@3
     displayName: "Upload to firebase app distribution"
-    inputs:
+    input:
       targetType: "inline"
       script: |
         npm i -g firebase-tools
